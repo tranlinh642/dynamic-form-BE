@@ -39,11 +39,26 @@ npm install
 Tạo file `.env` ở thư mục gốc (ngang hàng với `package.json`) và điền các thông số kết nối Database và JWT:
 
 ```env
+# Môi trường chạy hệ thống
+NODE_ENV="development"
+PORT=3000
+
 # Chuỗi kết nối tới PostgreSQL của bạn (Sửa lại user, password và db_name cho phù hợp)
 DATABASE_URL="postgresql://postgres:your_password@localhost:5432/dynamic_form_db?schema=public"
 
-# Chuỗi bí mật dùng để mã hóa JWT (Có thể điền bất kỳ)
-JWT_SECRET="super-secret-jwt-key"
+# Cấu hình Xác thực (Auth JWT)
+AUTH_SECRET="your-super-secret-jwt-key-change-this-in-production"
+AUTH_IGNORE_EXPIRATION="false"
+
+# Cấu hình CORS (Phân quyền nguồn gốc)
+CORS_ALLOWED_ORIGINS="http://localhost:5173,http://localhost:3000"
+CORS_CREDENTIALS="true"
+CORS_METHODS="GET,POST,PUT,DELETE,PATCH,OPTIONS"
+
+# Cấu hình Rate Limiter (Giới hạn lượt gọi API)
+RATELIMITER="false"
+RATELIMITER_RESET_TIMEMS_IN_MINUTES="1"
+RATELIMITER_MAX_REQUESTS="100"
 ```
 
 ### 4. Khởi tạo Database và Dữ liệu mẫu (Migration)
