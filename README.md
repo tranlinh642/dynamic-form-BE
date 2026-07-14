@@ -70,6 +70,7 @@ npm run start:dev
 ```
 
 Server backend sẽ chạy tại: `http://localhost:3000`
+- **Tài liệu API (Swagger UI Docs)**: `http://localhost:3000/api/docs`
 
 ---
 
