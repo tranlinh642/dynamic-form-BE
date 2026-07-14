@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { PingModule } from './presentation/ping/ping.module';
 import { AuthModule } from './presentation/auth/auth.module';
 import { ServerConfig } from './infrastructure/config/server.config';
+import { DatabaseModule } from './infrastructure/database/database.module';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { ServerConfig } from './infrastructure/config/server.config';
       },
     }),
 
-    PingModule,
+    DatabaseModule,
     AuthModule,
   ],
 })
