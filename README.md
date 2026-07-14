@@ -58,7 +58,7 @@ _(Lệnh này sẽ tự động tạo cấu trúc toàn bộ các bảng trong d
 
 **Tài khoản Admin mặc định để test:**
 
-- **Email:** `admin@gmail.com`
+- **Tên đăng nhập:** `admin`
 - **Mật khẩu:** `123456`
 
 ### 5. Chạy Application
