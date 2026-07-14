@@ -1,6 +1,6 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto } from '../../../presentation/dtos/login.dto';
+import { LoginDto } from '../../../presentation/dtos/auth/login.dto';
 import { ILoginUseCase } from './login.usecase.interface';
 import { IUSER_REPOSITORY_TOKEN } from 'src/core/repositories/user.repository.interface';
 import type { IUserRepository } from 'src/core/repositories/user.repository.interface';

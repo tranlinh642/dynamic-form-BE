@@ -4,6 +4,9 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './presentation/auth/auth.module';
 import { ServerConfig } from './infrastructure/config/server.config';
 import { DatabaseModule } from './infrastructure/database/database.module';
+import { FormModule } from './presentation/form/form.module';
+import { FieldModule } from './presentation/field/field.module';
+import { SubmissionModule } from './presentation/submission/submission.module';
 
 @Module({
   imports: [
@@ -31,6 +34,9 @@ import { DatabaseModule } from './infrastructure/database/database.module';
 
     DatabaseModule,
     AuthModule,
+    FormModule,
+    FieldModule,
+    SubmissionModule,
   ],
 })
 export class AppModule {}

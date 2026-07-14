@@ -6,6 +6,7 @@ import { LoginUseCase } from '../../core/use-cases/auth/login.usecase';
 import { ServerConfig } from '../../infrastructure/config/server.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RegisterUseCase } from 'src/core/use-cases/auth/register.usecase';
+import { GetCurrentUserUseCase } from '../../core/use-cases/auth/get-current-user.usecase';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { RegisterUseCase } from 'src/core/use-cases/auth/register.usecase';
     }),
   ],
   controllers: [AuthController],
-  providers: [LoginUseCase, RegisterUseCase],
+  providers: [LoginUseCase, RegisterUseCase, GetCurrentUserUseCase],
+  exports: [JwtModule],
 })
 export class AuthModule {}

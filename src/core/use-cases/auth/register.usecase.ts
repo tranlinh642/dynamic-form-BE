@@ -3,7 +3,7 @@ import { IRegisterUseCase } from './register.usecase.interface';
 import { IUSER_REPOSITORY_TOKEN } from 'src/core/repositories/user.repository.interface';
 import type { IUserRepository } from 'src/core/repositories/user.repository.interface';
 import { UserEntity } from 'src/core/entities/user.entity';
-import { RegisterDto } from 'src/presentation/dtos/register.dto';
+import { RegisterDto } from 'src/presentation/dtos/auth/register.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
