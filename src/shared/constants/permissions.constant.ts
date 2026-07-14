@@ -4,14 +4,13 @@ export const PERMISSIONS = {
   VIEW_FORM: 'VIEW_FORM',
   UPDATE_FORM: 'UPDATE_FORM',
   DELETE_FORM: 'DELETE_FORM',
-  
-  // Quyền cho Field
+
   CREATE_FIELD: 'CREATE_FIELD',
   UPDATE_FIELD: 'UPDATE_FIELD',
   DELETE_FIELD: 'DELETE_FIELD',
-  
-  // Quyền xem bài nộp
+
   VIEW_SUBMISSIONS: 'VIEW_SUBMISSIONS',
+  VIEW_ALL_SUBMISSIONS: 'VIEW_ALL_SUBMISSIONS',
 } as const;
 
 export type PermissionType = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

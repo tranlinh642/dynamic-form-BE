@@ -25,13 +25,17 @@ export class FormEntity {
       throw new Error('Thứ tự sắp xếp (order) không được là số âm');
     }
     if (!this.createdBy) {
-      throw new Error('Thông tin người tạo form (createdBy) không được để trống');
+      throw new Error(
+        'Thông tin người tạo form (createdBy) không được để trống',
+      );
     }
   }
 
   publish(): void {
     if (!this.fields || this.fields.length === 0) {
-      throw new Error('Không thể xuất bản form khi chưa có câu hỏi/trường dữ liệu nào');
+      throw new Error(
+        'Không thể xuất bản form khi chưa có câu hỏi/trường dữ liệu nào',
+      );
     }
     this.status = FormStatus.ACTIVE;
   }

@@ -12,7 +12,10 @@ export class GetActiveFormsUseCase implements IGetActiveFormsUseCase {
     private readonly formRepository: IFormRepository,
   ) {}
 
-  async execute(page: number, limit: number): Promise<{ data: FormEntity[], total: number }> {
+  async execute(
+    page: number,
+    limit: number,
+  ): Promise<{ data: FormEntity[]; total: number }> {
     return await this.formRepository.findAll(page, limit, FormStatus.ACTIVE);
   }
 }

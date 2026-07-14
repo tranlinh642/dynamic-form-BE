@@ -2,7 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { FormEntity } from 'src/core/entities/form.entity';
 import { IFORM_REPOSITORY_TOKEN } from 'src/core/repositories/form.repository.interface';
 import type { IFormRepository } from 'src/core/repositories/form.repository.interface';
-import { IGetFormsUseCase, GetFormsQuery, PaginatedResult } from './get-forms.usecase.interface';
+import {
+  IGetFormsUseCase,
+  GetFormsQuery,
+  PaginatedResult,
+} from './get-forms.usecase.interface';
 
 @Injectable()
 export class GetFormsUseCase implements IGetFormsUseCase {

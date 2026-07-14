@@ -7,8 +7,13 @@ export type UpdateFieldCommand = {
   order?: number;
   isRequired?: boolean;
   options?: any;
+  validation?: any;
 };
 
 export interface IUpdateFieldUseCase {
-  execute(formId: string, fieldId: string, command: UpdateFieldCommand): Promise<FieldEntity>;
+  execute(
+    formId: string,
+    fieldId: string,
+    command: UpdateFieldCommand,
+  ): Promise<FieldEntity>;
 }

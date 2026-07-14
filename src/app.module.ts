@@ -34,9 +34,9 @@ import { SubmissionModule } from './presentation/submission/submission.module';
 
     DatabaseModule,
     AuthModule,
+    SubmissionModule,
     FormModule,
     FieldModule,
-    SubmissionModule,
   ],
 })
 export class AppModule {}

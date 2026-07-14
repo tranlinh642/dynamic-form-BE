@@ -5,7 +5,7 @@ export class SuccessResponse {
     data: T,
     message: string = 'Thành công',
     statusCode: number = 200,
-    meta?: any
+    meta?: any,
   ): ISuccessResponse<T> {
     return {
       success: true,

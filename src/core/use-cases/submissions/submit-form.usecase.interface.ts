@@ -9,5 +9,8 @@ export type SubmitFormCommand = {
 };
 
 export interface ISubmitFormUseCase {
-  execute(userId: string, command: SubmitFormCommand): Promise<SubmissionEntity>;
+  execute(
+    userId: string,
+    command: SubmitFormCommand,
+  ): Promise<SubmissionEntity>;
 }

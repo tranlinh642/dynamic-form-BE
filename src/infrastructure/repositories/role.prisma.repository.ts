@@ -5,7 +5,10 @@ import { BasePrismaRepository } from './base.prisma.repository';
 import { IRoleRepository } from '../../core/repositories/role.repository.interface';
 
 @Injectable()
-export class RolePrismaRepository extends BasePrismaRepository<roles> implements IRoleRepository {
+export class RolePrismaRepository
+  extends BasePrismaRepository<roles>
+  implements IRoleRepository
+{
   constructor(prisma: PrismaService) {
     super(prisma, 'roles');
   }

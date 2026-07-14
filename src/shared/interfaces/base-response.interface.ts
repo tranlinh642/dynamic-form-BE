@@ -1,5 +1,5 @@
 export interface IBaseResponse {
-    success: boolean;
-    statusCode: number;
-    timestamp: string;
+  success: boolean;
+  statusCode: number;
+  timestamp: string;
 }

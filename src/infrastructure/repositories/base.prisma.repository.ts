@@ -4,7 +4,7 @@ import { IBaseRepository } from '../../core/repositories/base.repository.interfa
 export abstract class BasePrismaRepository<T> implements IBaseRepository<T> {
   constructor(
     protected readonly prisma: PrismaService,
-    private readonly modelName: string
+    private readonly modelName: string,
   ) {}
 
   protected get model() {

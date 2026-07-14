@@ -24,7 +24,7 @@ export class FormPrismaRepository implements IFormRepository {
   async findById(id: string): Promise<FormEntity | null> {
     const form = await this.prisma.forms.findUnique({
       where: { id },
-      include: { fields: true },
+      include: { fields: { orderBy: [{ order: 'asc' }, { id: 'asc' }] } },
     });
     if (!form) return null;
     return this.mapToEntity(form);
@@ -43,7 +43,8 @@ export class FormPrismaRepository implements IFormRepository {
         where: whereCondition,
         skip,
         take: limit,
-        orderBy: { order: 'asc' },
+        orderBy: [{ order: 'asc' }, { id: 'asc' }],
+        include: { fields: { orderBy: [{ order: 'asc' }, { id: 'asc' }] } },
       }),
     ]);
     return {
@@ -72,6 +73,16 @@ export class FormPrismaRepository implements IFormRepository {
       where: { id },
     });
   }
+  async updateOrders(orders: { id: string; order: number }[]): Promise<void> {
+    await this.prisma.$transaction(
+      orders.map((o) =>
+        this.prisma.forms.update({
+          where: { id: o.id },
+          data: { order: o.order },
+        }),
+      ),
+    );
+  }
   private mapToEntity(prismaForm: any): FormEntity {
     const entity = new FormEntity(
       prismaForm.id,
@@ -90,6 +101,7 @@ export class FormPrismaRepository implements IFormRepository {
         order: f.order,
         isRequired: f.is_required,
         options: f.options,
+        validation: f.validation,
       }));
     }
     return entity;

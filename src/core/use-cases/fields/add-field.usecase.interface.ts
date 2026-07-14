@@ -8,6 +8,7 @@ export type AddFieldCommand = {
   order?: number;
   isRequired?: boolean;
   options?: any;
+  validation?: any;
 };
 
 export interface IAddFieldUseCase {

@@ -6,11 +6,11 @@ export class SelectValidator implements IFieldValidator {
     if (!field.options || !Array.isArray(field.options)) {
       return `Trường ${field.label} bị lỗi cấu hình (thiếu danh sách lựa chọn).`;
     }
-    
+
     if (!field.options.includes(value)) {
       return `Giá trị của trường ${field.label} không nằm trong danh sách lựa chọn hợp lệ.`;
     }
-    
+
     return null;
   }
 }

@@ -6,11 +6,22 @@ export class TextValidator implements IFieldValidator {
     if (typeof value !== 'string') {
       return `Trường ${field.label} phải là định dạng chuỗi.`;
     }
-    
-    if (value.length > 200) {
-      return `Trường ${field.label} không được vượt quá 200 ký tự (hiện tại: ${value.length}).`;
+
+    let maxLength = 200; // default
+    let minLength = 0;
+
+    if (field.validation) {
+      if (field.validation.maxLength !== undefined) maxLength = field.validation.maxLength;
+      if (field.validation.minLength !== undefined) minLength = field.validation.minLength;
     }
-    
+
+    if (value.length > maxLength) {
+      return `Trường ${field.label} không được vượt quá ${maxLength} ký tự (hiện tại: ${value.length}).`;
+    }
+    if (value.length < minLength) {
+      return `Trường ${field.label} tối thiểu phải có ${minLength} ký tự (hiện tại: ${value.length}).`;
+    }
+
     return null;
   }
 }

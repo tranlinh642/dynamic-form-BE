@@ -1,8 +1,8 @@
-import { IBaseResponse } from "./base-response.interface";
+import { IBaseResponse } from './base-response.interface';
 
 export interface IErrorResponse extends IBaseResponse {
-    success: false;
-    errorCode: string;
-    message: string;
-    errors?: any[];
+  success: false;
+  errorCode: string;
+  message: string;
+  errors?: any[];
 }

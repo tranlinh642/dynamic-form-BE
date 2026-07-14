@@ -6,13 +6,13 @@ export class ColorValidator implements IFieldValidator {
     if (typeof value !== 'string') {
       return `Trường ${field.label} phải là định dạng mã màu HEX.`;
     }
-    
+
     const hexRegex = /^#[0-9A-Fa-f]{6}$/i;
-    
+
     if (!hexRegex.test(value)) {
       return `Trường ${field.label} không đúng định dạng mã màu HEX (VD: #FFFFFF).`;
     }
-    
+
     return null;
   }
 }

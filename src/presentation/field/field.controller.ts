@@ -1,10 +1,26 @@
-import { Controller, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiBody,
+} from '@nestjs/swagger';
 import { AddFieldUseCase } from '../../core/use-cases/fields/add-field.usecase';
 import { UpdateFieldUseCase } from '../../core/use-cases/fields/update-field.usecase';
 import { DeleteFieldUseCase } from '../../core/use-cases/fields/delete-field.usecase';
+import { UpdateFieldOrdersUseCase } from '../../core/use-cases/fields/update-field-orders.usecase';
 import { AddFieldRequestDto } from '../dtos/field/add-field.request.dto';
 import { UpdateFieldRequestDto } from '../dtos/field/update-field.request.dto';
+import { UpdateFieldOrdersDto } from '../dtos/field/update-field-orders.request.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { PermissionsGuard } from '../guards/permissions.guard';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
@@ -19,6 +35,7 @@ export class FieldController {
     private readonly addFieldUseCase: AddFieldUseCase,
     private readonly updateFieldUseCase: UpdateFieldUseCase,
     private readonly deleteFieldUseCase: DeleteFieldUseCase,
+    private readonly updateFieldOrdersUseCase: UpdateFieldOrdersUseCase,
   ) {}
 
   @Post()
@@ -40,9 +57,24 @@ export class FieldController {
       order: addFieldDto.order,
       isRequired: addFieldDto.isRequired,
       options: addFieldDto.options,
+      validation: addFieldDto.validation,
     };
     const field = await this.addFieldUseCase.execute(command);
     return SuccessResponse.create(field, 'Thêm field thành công', 201);
+  }
+
+  @Put('order')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions(PERMISSIONS.UPDATE_FIELD)
+  @ApiOperation({ summary: 'Cập nhật thứ tự sắp xếp của nhiều field' })
+  @ApiBody({ type: UpdateFieldOrdersDto })
+  @ApiResponse({ status: 200, description: 'Cập nhật thứ tự thành công' })
+  async updateFieldOrders(
+    @Param('formId') formId: string,
+    @Body() updateOrdersDto: UpdateFieldOrdersDto,
+  ) {
+    await this.updateFieldOrdersUseCase.execute(formId, updateOrdersDto.orders);
+    return SuccessResponse.create(null, 'Cập nhật thứ tự field thành công');
   }
 
   @Put(':fieldId')
@@ -64,8 +96,13 @@ export class FieldController {
       order: updateFieldDto.order,
       isRequired: updateFieldDto.isRequired,
       options: updateFieldDto.options,
+      validation: updateFieldDto.validation,
     };
-    const field = await this.updateFieldUseCase.execute(formId, fieldId, command);
+    const field = await this.updateFieldUseCase.execute(
+      formId,
+      fieldId,
+      command,
+    );
     return SuccessResponse.create(field, 'Cập nhật field thành công');
   }
 

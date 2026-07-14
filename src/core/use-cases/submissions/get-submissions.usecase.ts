@@ -11,7 +11,18 @@ export class GetSubmissionsUseCase implements IGetSubmissionsUseCase {
     private readonly submissionRepository: ISubmissionRepository,
   ) {}
 
-  async execute(userId: string, page: number, limit: number): Promise<{ data: SubmissionEntity[], total: number }> {
+  async execute(
+    userId: string,
+    page: number,
+    limit: number,
+  ): Promise<{ data: SubmissionEntity[]; total: number }> {
     return await this.submissionRepository.findByUserId(userId, page, limit);
+  }
+
+  async executeAll(
+    page: number,
+    limit: number,
+  ): Promise<{ data: SubmissionEntity[]; total: number }> {
+    return await this.submissionRepository.findAll(page, limit);
   }
 }

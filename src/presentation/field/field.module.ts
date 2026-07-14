@@ -3,6 +3,7 @@ import { FieldController } from './field.controller';
 import { AddFieldUseCase } from '../../core/use-cases/fields/add-field.usecase';
 import { UpdateFieldUseCase } from '../../core/use-cases/fields/update-field.usecase';
 import { DeleteFieldUseCase } from '../../core/use-cases/fields/delete-field.usecase';
+import { UpdateFieldOrdersUseCase } from '../../core/use-cases/fields/update-field-orders.usecase';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
@@ -12,6 +13,7 @@ import { AuthModule } from '../auth/auth.module';
     AddFieldUseCase,
     UpdateFieldUseCase,
     DeleteFieldUseCase,
+    UpdateFieldOrdersUseCase,
   ],
 })
 export class FieldModule {}

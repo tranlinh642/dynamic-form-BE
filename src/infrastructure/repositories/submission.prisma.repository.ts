@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { ISubmissionRepository } from '../../core/repositories/submission.repository.interface';
 import { SubmissionEntity } from '../../core/entities/submission.entity';
-import { SubmissionAnswerEntity } from '../../core/entities/submission-answer.entity';
 
 @Injectable()
 export class SubmissionPrismaRepository implements ISubmissionRepository {
@@ -10,25 +9,23 @@ export class SubmissionPrismaRepository implements ISubmissionRepository {
 
   async createWithAnswers(
     submission: Partial<SubmissionEntity>,
-    answers: Partial<SubmissionAnswerEntity>[]
+    answers: any[],
   ): Promise<SubmissionEntity> {
     const created = await this.prisma.submissions.create({
       data: {
         form_id: submission.formId!,
         user_id: submission.userId!,
-        submission_answers: {
-          create: answers.map(a => ({
-            field_id: a.fieldId!,
-            value: a.value!,
-          })),
-        },
+        answers: answers as any,
       },
-      include: { submission_answers: true },
     });
     return this.mapToEntity(created);
   }
 
-  async findByUserId(userId: string, page: number, limit: number): Promise<{ data: SubmissionEntity[], total: number }> {
+  async findByUserId(
+    userId: string,
+    page: number,
+    limit: number,
+  ): Promise<{ data: SubmissionEntity[]; total: number }> {
     const skip = (page - 1) * limit;
     const [total, rawSubmissions] = await Promise.all([
       this.prisma.submissions.count({ where: { user_id: userId } }),
@@ -37,7 +34,34 @@ export class SubmissionPrismaRepository implements ISubmissionRepository {
         skip,
         take: limit,
         orderBy: { submitted_at: 'desc' },
-        include: { submission_answers: true },
+        include: {
+          forms: { select: { id: true, title: true } }, // include form title
+          users: { select: { id: true, username: true, email: true } }, // include user info
+        },
+      }),
+    ]);
+
+    return {
+      data: rawSubmissions.map(this.mapToEntity),
+      total,
+    };
+  }
+
+  async findAll(
+    page: number,
+    limit: number,
+  ): Promise<{ data: SubmissionEntity[]; total: number }> {
+    const skip = (page - 1) * limit;
+    const [total, rawSubmissions] = await Promise.all([
+      this.prisma.submissions.count(),
+      this.prisma.submissions.findMany({
+        skip,
+        take: limit,
+        orderBy: { submitted_at: 'desc' },
+        include: {
+          forms: { select: { id: true, title: true } },
+          users: { select: { id: true, username: true, email: true } },
+        },
       }),
     ]);
 
@@ -54,13 +78,23 @@ export class SubmissionPrismaRepository implements ISubmissionRepository {
       prismaSub.user_id,
       prismaSub.submitted_at,
     );
-    if (prismaSub.submission_answers) {
-      entity.answers = prismaSub.submission_answers.map((a: any) => new SubmissionAnswerEntity(
-        a.id,
-        a.submission_id,
-        a.field_id,
-        a.value
-      ));
+    if (prismaSub.answers) {
+      entity.answers = prismaSub.answers;
+    } else {
+      entity.answers = [];
+    }
+    if (prismaSub.forms) {
+      (entity as any).form = {
+        id: prismaSub.forms.id,
+        title: prismaSub.forms.title,
+      };
+    }
+    if (prismaSub.users) {
+      (entity as any).user = {
+        id: prismaSub.users.id,
+        username: prismaSub.users.username,
+        email: prismaSub.users.email,
+      };
     }
     return entity;
   }

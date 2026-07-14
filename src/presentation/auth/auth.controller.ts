@@ -1,5 +1,11 @@
 import { Controller, Post, Body, Get, UseGuards, Req } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { LoginUseCase } from '../../core/use-cases/auth/login.usecase';
 import { LoginDto } from '../dtos/auth/login.dto';
 import { SuccessResponse } from '../../shared/responses/success-response';
@@ -44,7 +50,10 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Lấy thông tin tài khoản hiện tại kèm quyền' })
-  @ApiResponse({ status: 200, description: 'Trả về thông tin user và permissions' })
+  @ApiResponse({
+    status: 200,
+    description: 'Trả về thông tin user và permissions',
+  })
   async getMe(@Req() req: any) {
     const userId = req.user.sub;
     const profile = await this.getCurrentUserUseCase.execute(userId);

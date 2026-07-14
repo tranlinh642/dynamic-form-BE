@@ -8,4 +8,5 @@ export interface IFieldRepository {
   create(data: Partial<FieldEntity>): Promise<FieldEntity>;
   update(id: string, data: Partial<FieldEntity>): Promise<FieldEntity>;
   delete(id: string): Promise<void>;
+  updateOrders(orders: { id: string; order: number }[]): Promise<void>;
 }

@@ -1,5 +1,13 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsEnum, IsOptional, IsInt, Min, IsBoolean, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsInt,
+  Min,
+  IsBoolean,
+  IsArray,
+} from 'class-validator';
 import { FieldType } from '../../../shared/enums/field-type.enum';
 
 export class UpdateFieldRequestDto {
@@ -24,8 +32,15 @@ export class UpdateFieldRequestDto {
   @IsOptional()
   isRequired?: boolean;
 
-  @ApiPropertyOptional({ description: 'Các lựa chọn cho dạng select', type: [String] })
+  @ApiPropertyOptional({
+    description: 'Các lựa chọn cho dạng select',
+    type: [String],
+  })
   @IsArray()
   @IsOptional()
   options?: any[];
+
+  @ApiPropertyOptional({ description: 'Các luật validation (min, max, pattern, maxDate...)' })
+  @IsOptional()
+  validation?: any;
 }

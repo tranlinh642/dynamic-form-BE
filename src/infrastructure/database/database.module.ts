@@ -16,8 +16,6 @@ import { IFIELD_REPOSITORY_TOKEN } from '../../core/repositories/field.repositor
 import { FieldPrismaRepository } from '../repositories/field.prisma.repository';
 import { ISUBMISSION_REPOSITORY_TOKEN } from '../../core/repositories/submission.repository.interface';
 import { SubmissionPrismaRepository } from '../repositories/submission.prisma.repository';
-import { ISUBMISSION_ANSWER_REPOSITORY_TOKEN } from '../../core/repositories/submission-answer.repository.interface';
-import { SubmissionAnswerPrismaRepository } from '../repositories/submission-answer.prisma.repository';
 
 @Global()
 @Module({
@@ -55,10 +53,6 @@ import { SubmissionAnswerPrismaRepository } from '../repositories/submission-ans
       provide: ISUBMISSION_REPOSITORY_TOKEN,
       useClass: SubmissionPrismaRepository,
     },
-    {
-      provide: ISUBMISSION_ANSWER_REPOSITORY_TOKEN,
-      useClass: SubmissionAnswerPrismaRepository,
-    },
   ],
   exports: [
     PrismaService,
@@ -70,7 +64,6 @@ import { SubmissionAnswerPrismaRepository } from '../repositories/submission-ans
     IFORM_REPOSITORY_TOKEN,
     IFIELD_REPOSITORY_TOKEN,
     ISUBMISSION_REPOSITORY_TOKEN,
-    ISUBMISSION_ANSWER_REPOSITORY_TOKEN,
   ],
 })
 export class DatabaseModule {}

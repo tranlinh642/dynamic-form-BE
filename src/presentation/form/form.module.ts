@@ -5,6 +5,7 @@ import { GetFormsUseCase } from '../../core/use-cases/forms/get-forms.usecase';
 import { GetFormByIdUseCase } from '../../core/use-cases/forms/get-form-by-id.usecase';
 import { UpdateFormUseCase } from '../../core/use-cases/forms/update-form.usecase';
 import { DeleteFormUseCase } from '../../core/use-cases/forms/delete-form.usecase';
+import { UpdateFormOrdersUseCase } from '../../core/use-cases/forms/update-form-orders.usecase';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
@@ -16,6 +17,7 @@ import { AuthModule } from '../auth/auth.module';
     GetFormByIdUseCase,
     UpdateFormUseCase,
     DeleteFormUseCase,
+    UpdateFormOrdersUseCase,
   ],
 })
 export class FormModule {}

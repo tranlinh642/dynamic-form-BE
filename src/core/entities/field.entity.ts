@@ -9,5 +9,6 @@ export class FieldEntity {
     public order: number,
     public isRequired: boolean,
     public options: any | null,
+    public validation: any | null,
   ) {}
 }

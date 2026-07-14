@@ -13,7 +13,9 @@ export class DeleteFieldUseCase implements IDeleteFieldUseCase {
   async execute(formId: string, fieldId: string): Promise<void> {
     const existingField = await this.fieldRepository.findById(fieldId);
     if (!existingField || existingField.formId !== formId) {
-      throw new NotFoundException(`Field với ID ${fieldId} không tồn tại trong form ${formId}`);
+      throw new NotFoundException(
+        `Field với ID ${fieldId} không tồn tại trong form ${formId}`,
+      );
     }
 
     await this.fieldRepository.delete(fieldId);

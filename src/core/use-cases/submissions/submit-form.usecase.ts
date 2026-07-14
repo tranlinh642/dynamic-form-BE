@@ -1,5 +1,13 @@
-import { Inject, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { ISubmitFormUseCase, SubmitFormCommand } from './submit-form.usecase.interface';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import {
+  ISubmitFormUseCase,
+  SubmitFormCommand,
+} from './submit-form.usecase.interface';
 import { SubmissionEntity } from '../../entities/submission.entity';
 import { IFORM_REPOSITORY_TOKEN } from '../../repositories/form.repository.interface';
 import { ISUBMISSION_REPOSITORY_TOKEN } from '../../repositories/submission.repository.interface';
@@ -17,11 +25,16 @@ export class SubmitFormUseCase implements ISubmitFormUseCase {
     private readonly submissionRepository: ISubmissionRepository,
   ) {}
 
-  async execute(userId: string, command: SubmitFormCommand): Promise<SubmissionEntity> {
+  async execute(
+    userId: string,
+    command: SubmitFormCommand,
+  ): Promise<SubmissionEntity> {
     const form = await this.formRepository.findById(command.formId);
 
     if (!form || form.status !== FormStatus.ACTIVE) {
-      throw new NotFoundException(`Form với ID ${command.formId} không tồn tại hoặc chưa được kích hoạt.`);
+      throw new NotFoundException(
+        `Form với ID ${command.formId} không tồn tại hoặc chưa được kích hoạt.`,
+      );
     }
 
     const errors: Record<string, string> = {};
@@ -30,17 +43,20 @@ export class SubmitFormUseCase implements ISubmitFormUseCase {
     const formFields = form.fields || [];
 
     for (const field of formFields) {
-      const answer = command.answers.find(a => a.fieldId === field.id);
+      const answer = command.answers.find((a) => a.fieldId === field.id);
       const value = answer ? answer.value : undefined;
 
+      const isEmpty = value === undefined || value === null || (typeof value === 'string' && value.trim() === '');
+
       // Required Check
-      if (field.isRequired && (value === undefined || value === null || value.trim() === '')) {
+      if (field.isRequired && isEmpty) {
         errors[field.id] = `Trường ${field.label} là bắt buộc.`;
         continue;
       }
 
       // Nếu không required và không có value thì bỏ qua validate
-      if (value === undefined || value === null || value.trim() === '') {
+      if (isEmpty) {
+        parsedAnswers.push({ fieldId: field.id, value: '' });
         continue;
       }
 
@@ -67,7 +83,7 @@ export class SubmitFormUseCase implements ISubmitFormUseCase {
 
     return await this.submissionRepository.createWithAnswers(
       { formId: form.id, userId },
-      parsedAnswers
+      parsedAnswers,
     );
   }
 }

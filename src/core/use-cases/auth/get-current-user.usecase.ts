@@ -1,5 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { IGetCurrentUserUseCase, UserProfileResponse } from './get-current-user.usecase.interface';
+import {
+  IGetCurrentUserUseCase,
+  UserProfileResponse,
+} from './get-current-user.usecase.interface';
 import { IUSER_REPOSITORY_TOKEN } from '../../repositories/user.repository.interface';
 import type { IUserRepository } from '../../repositories/user.repository.interface';
 
@@ -16,7 +19,8 @@ export class GetCurrentUserUseCase implements IGetCurrentUserUseCase {
       throw new NotFoundException('Tài khoản không tồn tại');
     }
 
-    const permissions = await this.userRepository.getPermissionsByUserId(userId);
+    const permissions =
+      await this.userRepository.getPermissionsByUserId(userId);
 
     return {
       id: rawUser.id,

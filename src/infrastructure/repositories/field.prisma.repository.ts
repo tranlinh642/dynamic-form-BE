@@ -11,7 +11,7 @@ export class FieldPrismaRepository implements IFieldRepository {
   async findByFormId(formId: string): Promise<FieldEntity[]> {
     const rawFields = await this.prisma.fields.findMany({
       where: { form_id: formId },
-      orderBy: { order: 'asc' },
+      orderBy: [{ order: 'asc' }, { id: 'asc' }],
     });
     return rawFields.map(this.mapToEntity);
   }
@@ -31,6 +31,7 @@ export class FieldPrismaRepository implements IFieldRepository {
         order: data.order ?? 0,
         is_required: data.isRequired ?? false,
         options: data.options ?? null,
+        validation: data.validation ?? null,
       },
     });
     return this.mapToEntity(created);
@@ -45,6 +46,7 @@ export class FieldPrismaRepository implements IFieldRepository {
         order: data.order,
         is_required: data.isRequired,
         options: data.options,
+        validation: data.validation,
       },
     });
     return this.mapToEntity(updated);
@@ -52,6 +54,17 @@ export class FieldPrismaRepository implements IFieldRepository {
 
   async delete(id: string): Promise<void> {
     await this.prisma.fields.delete({ where: { id } });
+  }
+
+  async updateOrders(orders: { id: string; order: number }[]): Promise<void> {
+    await this.prisma.$transaction(
+      orders.map((o) =>
+        this.prisma.fields.update({
+          where: { id: o.id },
+          data: { order: o.order },
+        }),
+      ),
+    );
   }
 
   private mapToEntity(prismaField: any): FieldEntity {
@@ -63,6 +76,7 @@ export class FieldPrismaRepository implements IFieldRepository {
       prismaField.order,
       prismaField.is_required,
       prismaField.options,
+      prismaField.validation,
     );
   }
 }

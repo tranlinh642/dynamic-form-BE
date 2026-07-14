@@ -1,13 +1,35 @@
-import { Controller, Post, Body, UseGuards, Req, Get, Query, ParseIntPipe, DefaultValuePipe, Param, Put, Delete } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiBody } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Req,
+  Get,
+  Query,
+  ParseIntPipe,
+  DefaultValuePipe,
+  Param,
+  Put,
+  Delete,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiQuery,
+  ApiBody,
+} from '@nestjs/swagger';
 import { CreateFormUseCase } from '../../core/use-cases/forms/create-form.usecase';
 import { GetFormsUseCase } from '../../core/use-cases/forms/get-forms.usecase';
 import { GetFormByIdUseCase } from '../../core/use-cases/forms/get-form-by-id.usecase';
 import { UpdateFormUseCase } from '../../core/use-cases/forms/update-form.usecase';
 import { DeleteFormUseCase } from '../../core/use-cases/forms/delete-form.usecase';
+import { UpdateFormOrdersUseCase } from '../../core/use-cases/forms/update-form-orders.usecase';
 import { FormStatus } from '../../shared/enums/form-status.enum';
 import { CreateFormRequestDto } from '../dtos/form/create-form.request.dto';
 import { UpdateFormRequestDto } from '../dtos/form/update-form.request.dto';
+import { UpdateFormOrdersDto } from '../dtos/form/update-form-orders.request.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { PermissionsGuard } from '../guards/permissions.guard';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
@@ -25,6 +47,7 @@ export class FormController {
     private readonly getFormByIdUseCase: GetFormByIdUseCase,
     private readonly updateFormUseCase: UpdateFormUseCase,
     private readonly deleteFormUseCase: DeleteFormUseCase,
+    private readonly updateFormOrdersUseCase: UpdateFormOrdersUseCase,
   ) {}
 
   @Post()
@@ -34,10 +57,7 @@ export class FormController {
   @ApiBody({ type: CreateFormRequestDto })
   @ApiResponse({ status: 201, description: 'Tạo form thành công' })
   @ApiResponse({ status: 400, description: 'Dữ liệu không hợp lệ' })
-  async create(
-    @Body() createFormDto: CreateFormRequestDto,
-    @Req() req: any,
-  ) {
+  async create(@Body() createFormDto: CreateFormRequestDto, @Req() req: any) {
     const userId = req.user.sub;
     const command = {
       title: createFormDto.title,
@@ -61,7 +81,24 @@ export class FormController {
     @Query('status') status?: FormStatus,
   ) {
     const result = await this.getFormsUseCase.execute({ page, limit, status });
-    return PaginatedResponse.create(result.data, result.total, page, limit, 'Lấy danh sách form thành công');
+    return PaginatedResponse.create(
+      result.data,
+      result.total,
+      page,
+      limit,
+      'Lấy danh sách form thành công',
+    );
+  }
+
+  @Put('order')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions(PERMISSIONS.UPDATE_FORM)
+  @ApiOperation({ summary: 'Cập nhật thứ tự sắp xếp của nhiều form' })
+  @ApiBody({ type: UpdateFormOrdersDto })
+  @ApiResponse({ status: 200, description: 'Cập nhật thứ tự thành công' })
+  async updateFormOrders(@Body() updateOrdersDto: UpdateFormOrdersDto) {
+    await this.updateFormOrdersUseCase.execute(updateOrdersDto.orders);
+    return SuccessResponse.create(null, 'Cập nhật thứ tự form thành công');
   }
 
   @Get(':id')

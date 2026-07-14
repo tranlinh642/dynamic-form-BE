@@ -8,10 +8,6 @@ import { AuthModule } from '../auth/auth.module';
 @Module({
   imports: [AuthModule],
   controllers: [SubmissionController],
-  providers: [
-    SubmitFormUseCase,
-    GetActiveFormsUseCase,
-    GetSubmissionsUseCase,
-  ],
+  providers: [SubmitFormUseCase, GetActiveFormsUseCase, GetSubmissionsUseCase],
 })
 export class SubmissionModule {}
